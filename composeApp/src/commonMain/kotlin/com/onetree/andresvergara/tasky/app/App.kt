@@ -1,4 +1,4 @@
-package com.onetree.andresvergara.tasky
+package com.onetree.andresvergara.tasky.app
 
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.FloatingActionButton

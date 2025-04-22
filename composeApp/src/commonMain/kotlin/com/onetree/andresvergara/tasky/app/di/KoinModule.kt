@@ -1,4 +1,4 @@
-package com.onetree.andresvergara.tasky.di
+package com.onetree.andresvergara.tasky.app.di
 
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
