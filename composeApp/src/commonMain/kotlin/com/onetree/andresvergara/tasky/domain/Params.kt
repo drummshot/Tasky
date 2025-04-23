@@ -3,6 +3,6 @@ package com.onetree.andresvergara.tasky.domain
 import com.onetree.andresvergara.tasky.domain.base.DomainObject
 
 class Params<I : DomainObject> {
-    val item: I? = null
-    val id: Long? = null
+    var item: I? = null
+    var id: Long? = null
 }

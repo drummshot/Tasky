@@ -7,8 +7,7 @@ import kotlin.uuid.ExperimentalUuidApi
 
 @Entity
 @OptIn(ExperimentalUuidApi::class)
-data class TaskEntity
-    (
+data class TaskEntity(
     @PrimaryKey(autoGenerate = true)
     override val id: Long = 0L,
     override val title: String,
@@ -17,6 +16,7 @@ data class TaskEntity
     override val latitude: Double?,
     override val longitude: Double?
 ) : Task {
+
     constructor(task: Task) : this(
         id = task.id,
         title = task.title,

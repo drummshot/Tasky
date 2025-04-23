@@ -1,13 +1,14 @@
 package com.onetree.andresvergara.tasky.domain.task
 
 data class TaskModel(
-    override val id: Long,
-    override val title: String,
-    override val description: String?,
-    override val completed: Boolean,
-    override val latitude: Double?,
-    override val longitude: Double?,
+    override var id: Long = 0L,
+    override var title: String,
+    override var description: String? = null,
+    override var completed: Boolean = false,
+    override var latitude: Double? = null,
+    override var longitude: Double? = null
 ) : Task {
+
     constructor(task: Task) : this(
         id = task.id,
         title = task.title,

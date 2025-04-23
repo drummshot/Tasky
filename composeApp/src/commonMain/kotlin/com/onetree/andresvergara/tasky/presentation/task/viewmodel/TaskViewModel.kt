@@ -3,6 +3,9 @@ package com.onetree.andresvergara.tasky.presentation.task.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.onetree.andresvergara.tasky.domain.AppException
+import com.onetree.andresvergara.tasky.domain.Params
+import com.onetree.andresvergara.tasky.domain.task.Task
+import com.onetree.andresvergara.tasky.domain.task.TaskModel
 import com.onetree.andresvergara.tasky.domain.task.usecase.CreateTaskUseCase
 import com.onetree.andresvergara.tasky.domain.task.usecase.ListTasksUseCase
 import com.onetree.andresvergara.tasky.presentation.task.state.TaskListUIState
@@ -12,6 +15,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class TaskViewModel(
     private val listTasks: ListTasksUseCase,
@@ -62,6 +66,24 @@ class TaskViewModel(
                     )
                 }
 
+            }
+        }
+    }
+
+    fun saveTask(title: String, description: String) {
+        viewModelScope.launch {
+            val result = createTask.invoke(
+                Params<Task>().apply {
+                    item = TaskModel(
+                        title = title,
+                        description = description
+                    )
+                }
+            )
+            if (result.isSuccess) {
+                loadTasks()
+            } else {
+                // Error Handling
             }
         }
     }

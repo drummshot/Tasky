@@ -27,16 +27,16 @@ class TaskRepoImpl(
         }
     }
 
-    override suspend fun read(id: Long): Result<Task> {
-        val task = datasource.read(id)
-        return if (task != null) {
+    override suspend fun read(id: Long): Result<Task?> {
+        return try {
+            val task = datasource.read(id)
             Result.success(task)
-        } else {
+        } catch (e: Exception) {
             Result.failure(
                 DataException(
-                    message = "Task with id [$id] not found",
-                    code = Error.DATABASE_READ_ERROR,
-                    cause = null
+                    message = "Error reading task, id:[$id]",
+                    code = Error.DATABASE_READING_ERROR,
+                    cause = e
                 )
             )
         }
@@ -51,6 +51,17 @@ class TaskRepoImpl(
     }
 
     override suspend fun list(): Result<List<Task>> {
-        return Result.success(datasource.list())
+        return try {
+            val lists = datasource.list()
+            return Result.success(lists)
+        } catch (e: Exception) {
+            Result.failure(
+                DataException(
+                    message = "Error listing tasks",
+                    code = Error.DATABASE_READING_ERROR,
+                    cause = e
+                )
+            )
+        }
     }
 }

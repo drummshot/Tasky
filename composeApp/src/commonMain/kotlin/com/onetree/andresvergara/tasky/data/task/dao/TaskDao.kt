@@ -3,11 +3,8 @@ package com.onetree.andresvergara.tasky.data.task.dao
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Upsert
 import com.onetree.andresvergara.tasky.data.task.TaskEntity
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TaskDao {
@@ -17,5 +14,8 @@ interface TaskDao {
 
     @Delete
     suspend fun delete(task: TaskEntity)
+
+    @Query("SELECT * FROM taskentity")
+    suspend fun getAll(): List<TaskEntity>
 
 }

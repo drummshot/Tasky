@@ -17,7 +17,7 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -28,33 +28,49 @@ kotlin {
             isStatic = true
         }
     }
-    
+
     sourceSets {
-        
+
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
 
+            //koin
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
         }
         commonMain.dependencies {
+
+            //viewmodel
+            implementation(libs.androidx.lifecycle.viewmodel)
+
+            //Compose
+            implementation(libs.androidx.lifecycle.runtime.compose)
+
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
-            implementation(libs.androidx.lifecycle.viewmodel)
-            implementation(libs.androidx.lifecycle.runtime.compose)
 
+            //koin
             api(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.composeVM)
-            implementation(compose.components.resources)
 
+            //Room
             implementation(libs.room.runtime)
             implementation(libs.sqlite.bundled)
+            implementation(libs.navigation.compose)
+            implementation(libs.botomsheet.compose)
+
+            //Log
+            implementation(libs.kermit)
+
+            // Geolocation
+            implementation(libs.compass.geolocation)
+            implementation(libs.compass.geolocation.mobile)
         }
     }
 }

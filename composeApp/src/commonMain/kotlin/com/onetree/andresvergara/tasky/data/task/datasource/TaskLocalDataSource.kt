@@ -27,7 +27,7 @@ class TaskLocalDataSource(
     }
 
     override suspend fun list(): List<Task> {
-        TODO("Not yet implemented")
+        return taskDao.getAll()
     }
 
 }

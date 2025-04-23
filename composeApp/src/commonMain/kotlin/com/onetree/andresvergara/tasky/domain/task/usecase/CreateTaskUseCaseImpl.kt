@@ -6,17 +6,29 @@ import com.onetree.andresvergara.tasky.domain.Params
 import com.onetree.andresvergara.tasky.domain.base.BaseUseCase
 import com.onetree.andresvergara.tasky.domain.task.Task
 import com.onetree.andresvergara.tasky.domain.task.TaskRepo
+import dev.jordond.compass.geolocation.Geolocator
+import dev.jordond.compass.geolocation.currentLocationOrNull
+import dev.jordond.compass.geolocation.mobile
 
 class CreateTaskUseCaseImpl(
-    private val taskRepo: TaskRepo
+    private val taskRepo: TaskRepo,
+    private val geoLocator: Geolocator = Geolocator.mobile()
 ) : BaseUseCase<Task, Task>(), CreateTaskUseCase {
 
-    override suspend fun execute(params: Params<Task>?): Result<Task> {
+    private suspend fun updateTaskCurrentLocation(task: Task) {
+        geoLocator.currentLocationOrNull()?.let { location ->
+            task.latitude = location.coordinates.latitude
+            task.longitude = location.coordinates.longitude
+        }
+    }
+
+    override suspend fun execute(params: Params<Task>?): Result<Task?> {
         val task = params?.item
 
-        return if (params?.item != null)
+        return if (task != null) {
+            updateTaskCurrentLocation(task)
             taskRepo.create(task)
-        else Result.failure(
+        } else Result.failure(
             exception = ValidationException(
                 message = "Invalid Params",
                 code = Error.INVALID_PARAMS

@@ -6,7 +6,7 @@ interface RepoBase<DO : DomainObject> {
 
     suspend fun create(item: DO): Result<DO>
 
-    suspend fun read(id: Long): Result<DO>
+    suspend fun read(id: Long): Result<DO?>
 
     suspend fun update(item: Task): Result<DO>
 
