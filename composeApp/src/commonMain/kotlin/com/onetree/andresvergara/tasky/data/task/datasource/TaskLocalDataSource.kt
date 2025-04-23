@@ -8,29 +8,25 @@ class TaskLocalDataSource(
     private val taskDao: TaskDao
 ) : TaskDataSource {
 
-    override suspend fun create(item: Task): Result<Task> {
-        return try {
-            val taskEntity = TaskEntity(item)
-            taskDao.insert(taskEntity)
-            Result.success(item)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
+    override suspend fun create(item: Task): Task {
+        val taskEntity = TaskEntity(item)
+        taskDao.insert(taskEntity)
+        return taskEntity
     }
 
-    override suspend fun read(id: String): Result<Task> {
+    override suspend fun read(id: Long): Task? {
         TODO("Not yet implemented")
     }
 
-    override suspend fun update(item: Task): Result<Task> {
+    override suspend fun update(item: Task): Task {
         TODO("Not yet implemented")
     }
 
-    override suspend fun delete(id: String): Result<Boolean> {
+    override suspend fun delete(id: Long): Boolean {
         TODO("Not yet implemented")
     }
 
-    override suspend fun list(): Result<List<Task>> {
+    override suspend fun list(): List<Task> {
         TODO("Not yet implemented")
     }
 

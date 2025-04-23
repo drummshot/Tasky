@@ -9,8 +9,8 @@ import kotlin.uuid.ExperimentalUuidApi
 @OptIn(ExperimentalUuidApi::class)
 data class TaskEntity
     (
-    @PrimaryKey
-    override val id: String,
+    @PrimaryKey(autoGenerate = true)
+    override val id: Long = 0L,
     override val title: String,
     override val description: String?,
     override val completed: Boolean,

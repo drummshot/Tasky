@@ -2,15 +2,15 @@ package com.onetree.andresvergara.tasky.domain.base
 
 import com.onetree.andresvergara.tasky.domain.task.Task
 
-interface RepoBase<B : DomainObject> {
+interface RepoBase<DO : DomainObject> {
 
-    suspend fun create(task: B): Result<B>
+    suspend fun create(item: DO): Result<DO>
 
-    suspend fun read(id: String): Result<B>
+    suspend fun read(id: Long): Result<DO>
 
-    suspend fun update(task: Task): Result<B>
+    suspend fun update(item: Task): Result<DO>
 
-    suspend fun delete(id: String): Result<Boolean>
+    suspend fun delete(id: Long): Result<Boolean>
 
-    suspend fun list(): Result<List<B>>
+    suspend fun list(): Result<List<DO>>
 }

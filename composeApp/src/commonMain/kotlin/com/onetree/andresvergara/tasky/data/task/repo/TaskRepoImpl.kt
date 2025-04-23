@@ -1,30 +1,56 @@
 package com.onetree.andresvergara.tasky.data.task.repo
 
 import com.onetree.andresvergara.tasky.data.task.datasource.TaskDataSource
+import com.onetree.andresvergara.tasky.domain.AppException.DataException
+import com.onetree.andresvergara.tasky.domain.Error
 import com.onetree.andresvergara.tasky.domain.task.Task
-import com.onetree.andresvergara.tasky.domain.task.repo.TaskRepo
+import com.onetree.andresvergara.tasky.domain.task.TaskModel
+import com.onetree.andresvergara.tasky.domain.task.TaskRepo
 
 class TaskRepoImpl(
     private val datasource: TaskDataSource
 ) : TaskRepo {
 
     override suspend fun create(task: Task): Result<Task> {
-        return datasource.create(task)
+        return try {
+            val created = datasource.create(task)
+            val mapped = TaskModel(created)
+            return Result.success(mapped)
+        } catch (e: Exception) {
+            Result.failure(
+                DataException(
+                    message = "Error creating task [$task]",
+                    code = Error.DATABASE_INSERTION_ERROR,
+                    cause = e
+                )
+            )
+        }
     }
 
-    override suspend fun read(id: String): Result<Task> {
-        return datasource.read(id)
+    override suspend fun read(id: Long): Result<Task> {
+        val task = datasource.read(id)
+        return if (task != null) {
+            Result.success(task)
+        } else {
+            Result.failure(
+                DataException(
+                    message = "Task with id [$id] not found",
+                    code = Error.DATABASE_READ_ERROR,
+                    cause = null
+                )
+            )
+        }
     }
 
     override suspend fun update(task: Task): Result<Task> {
-        return datasource.update(task)
+        return Result.success(datasource.update(task))
     }
 
-    override suspend fun delete(id: String): Result<Boolean> {
-        return datasource.delete(id)
+    override suspend fun delete(id: Long): Result<Boolean> {
+        return Result.success(datasource.delete(id))
     }
 
     override suspend fun list(): Result<List<Task>> {
-        return datasource.list()
+        return Result.success(datasource.list())
     }
 }

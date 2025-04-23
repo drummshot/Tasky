@@ -1,4 +1,4 @@
-package com.onetree.andresvergara.tasky.presentation.task.user
+package com.onetree.andresvergara.tasky.presentation.task.ui
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
