@@ -47,12 +47,11 @@ Tasky includes a custom `SessionManager` for handling user sessions and enforcin
 
 ## 🌍 Platform Support
 
-| Platform     | Status           |
-|--------------|------------------|
-| Android      | ✅ Full Support   |
-| Desktop (JVM)| ✅ Full Support   |
-| iOS          | 🔄 In Progress (Experimental) |
-|              |                  |
+| Platform     | Status                       |
+|--------------|------------------------------|
+| Android      | ✅ Full Support               |
+| iOS          | 🔄 In Progress (Experimental)|
+|              |                              |
 
 ---
 ## Screenshots
