@@ -56,7 +56,7 @@ Tasky includes a custom `SessionManager` for handling user sessions and enforcin
 
 ---
 ## Screenshots
-<img src="https://github.com/user-attachments/assets/9489303a-921d-4a09-b022-4fab68236c25" alt="Alt Text" width="300" height="200">
+<img src="https://github.com/user-attachments/assets/9489303a-921d-4a09-b022-4fab68236c25" alt="Alt Text" width="300" height="500">
 
 
 ---
