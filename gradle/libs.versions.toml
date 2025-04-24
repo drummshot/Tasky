@@ -20,7 +20,6 @@ roomCommon = "2.7.0"
 ksp = "2.1.10-1.0.30"
 sqlite = "2.5.0"
 navigation-compose = "2.8.0-alpha10"
-botom-sheet-compose = "0.6.0-alpha05"
 kermit = "2.0.5"
 compass = "2.0.0"
 
@@ -47,7 +46,6 @@ room-runtime-android = { group = "androidx.room", name = "room-runtime-android",
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomCommon" }
 sqlite-bundled = { group = "androidx.sqlite", name = "sqlite-bundled", version.ref = "sqlite" }
 navigation-compose = { group = "org.jetbrains.androidx.navigation", name = "navigation-compose", version.ref = "navigation-compose" }
-botomsheet-compose = { group = "io.github.dokar3", name = "sheets-m3", version.ref = "botom-sheet-compose" }
 kermit = { group = "co.touchlab", name = "kermit", version.ref = "kermit" }
 compass-geolocation = { module = "dev.jordond.compass:geolocation", version.ref = "compass" }
 compass-geolocation-mobile = { module = "dev.jordond.compass:geolocation-mobile", version.ref = "compass" }

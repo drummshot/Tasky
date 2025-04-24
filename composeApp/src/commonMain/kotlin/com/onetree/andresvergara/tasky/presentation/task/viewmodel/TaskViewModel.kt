@@ -7,25 +7,62 @@ import com.onetree.andresvergara.tasky.domain.Params
 import com.onetree.andresvergara.tasky.domain.task.Task
 import com.onetree.andresvergara.tasky.domain.task.TaskModel
 import com.onetree.andresvergara.tasky.domain.task.usecase.CreateTaskUseCase
+import com.onetree.andresvergara.tasky.domain.task.usecase.DeleteTasksUseCase
 import com.onetree.andresvergara.tasky.domain.task.usecase.ListTasksUseCase
+import com.onetree.andresvergara.tasky.domain.task.usecase.MarkCompletedTasksUseCase
+import com.onetree.andresvergara.tasky.domain.task.usecase.TaskDetailUseCase
+import com.onetree.andresvergara.tasky.presentation.base.UiEvent
+import com.onetree.andresvergara.tasky.presentation.base.UiEvent.IDLE
 import com.onetree.andresvergara.tasky.presentation.task.state.TaskListUIState
+import com.onetree.andresvergara.tasky.presentation.task.state.TaskUIState
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class TaskViewModel(
+    private val taskDetail: TaskDetailUseCase,
     private val listTasks: ListTasksUseCase,
-    private val createTask: CreateTaskUseCase
+    private val createTask: CreateTaskUseCase,
+    private val deleteTask: DeleteTasksUseCase,
+    private val markCompletedTasks: MarkCompletedTasksUseCase,
 ) : ViewModel() {
 
     private var _loadListScreen = MutableStateFlow(false)
 
-    private var _uiState = MutableStateFlow(TaskListUIState())
-    val uiState: StateFlow<TaskListUIState> = _uiState
+    private var _uiListState = MutableStateFlow(TaskListUIState())
+    val uiListState: StateFlow<TaskListUIState> = _uiListState
+
+    private var _uiDetailState = MutableStateFlow<TaskUIState>(TaskUIState())
+    val uiDetailState: StateFlow<TaskUIState> = _uiDetailState
+
+    private val _uiSnackEvent = MutableSharedFlow<UiEvent>()
+    val uiSnackEvent: SharedFlow<UiEvent> = _uiSnackEvent
+
+    fun getTasksById(taskId: Long) {
+        viewModelScope.launch {
+            val call = taskDetail.invoke(
+                Params<Task>().apply {
+                    id = taskId
+                }
+            )
+            if (call.isSuccess) {
+                call.getOrNull()?.let { task ->
+                    _uiDetailState.update {
+                        TaskUIState(task)
+                    }
+                }
+            } else {
+                //handle error
+            }
+        }
+    }
 
     val loadScreen =
         _loadListScreen.onStart {
@@ -37,7 +74,7 @@ class TaskViewModel(
         )
 
     private fun activateLoading() {
-        _uiState.update {
+        _uiListState.update {
             it.copy(
                 isLoading = true
             )
@@ -49,9 +86,11 @@ class TaskViewModel(
         val call = listTasks.invoke()
         when {
             call.isSuccess -> {
-                _uiState.update {
+                _uiListState.update {
                     it.copy(
-                        tasks = call.getOrNull() ?: emptyList(),
+                        tasks = call.getOrNull()?.mapNotNull {
+                            TaskUIState(it)
+                        } ?: emptyList(),
                         isLoading = false,
                         errorCode = null
                     )
@@ -59,10 +98,10 @@ class TaskViewModel(
             }
 
             call.isFailure -> {
-                _uiState.update {
+                _uiListState.update {
                     it.copy(
                         isLoading = false,
-                        errorCode = (call.exceptionOrNull() as? AppException)?.code
+                        errorCode = (call.exceptionOrNull() as? AppException)?.errorCode
                     )
                 }
 
@@ -81,7 +120,83 @@ class TaskViewModel(
                 }
             )
             if (result.isSuccess) {
-                loadTasks()
+                result.getOrNull()?.let { newTask ->
+                    _uiListState.update {
+                        it.copy(
+                            tasks = it.tasks + TaskUIState(newTask)
+                        )
+                    }
+                }
+                _uiSnackEvent.tryEmit(UiEvent.ShowSnackbar(true))
+            } else {
+                // Error Handling
+            }
+        }
+    }
+
+    fun onToggleSelection(state: TaskUIState) {
+        _uiListState.update {
+            it.copy(
+                tasks = it.tasks.map {
+                    if (it.id == state.id) {
+                        it.copy(isSelected = !it.isSelected)
+                    } else {
+                        it
+                    }
+                }
+            )
+        }
+    }
+
+    fun deleteSelected() {
+        viewModelScope.launch {
+            val selectedTasks = _uiListState.value.tasks
+                .filter { it.isSelected }
+                .map { it.id }
+
+            val call = deleteTask.invoke(
+                Params<Task>().apply {
+                    idsList = selectedTasks
+                })
+            if (call.isSuccess) {
+                _uiListState.update {
+                    it.copy(
+                        tasks = it.tasks.filter { !selectedTasks.contains(it.id) }
+                    )
+                }
+                _uiSnackEvent.tryEmit(UiEvent.ShowSnackbar(true))
+            } else {
+                // Error Handling
+            }
+        }
+
+    }
+
+    fun markAsComplete() {
+        viewModelScope.launch {
+            val selectedTasks = _uiListState.value.tasks
+                .filter { it.isSelected }
+                .map { it.id }
+
+            val call = markCompletedTasks.invoke(
+                Params<Task>().apply {
+                    idsList = selectedTasks
+                })
+            if (call.isSuccess) {
+                _uiListState.update {
+                    it.copy(
+                        tasks = it.tasks.map {
+                            if (it.id in selectedTasks) {
+                                it.copy(
+                                    completed = true
+                                )
+                            } else {
+                                it
+                            }
+                        }
+                    )
+                }
+                _uiSnackEvent.tryEmit(UiEvent.ShowSnackbar(true))
             } else {
                 // Error Handling
             }

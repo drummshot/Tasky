@@ -8,9 +8,9 @@ interface DataSource<DO : DomainObject> {
 
     suspend fun read(id: Long): DO?
 
-    suspend fun update(item: DO): DO
+    suspend fun update(items: List<DO>): List<DO>
 
-    suspend fun delete(id: Long): Boolean
+    suspend fun delete(ids: List<Long>): Boolean
 
     suspend fun list(): List<DO>
 }

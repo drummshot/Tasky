@@ -1,13 +1,16 @@
-package com.onetree.andresvergara.tasky.domain.task
+package com.onetree.andresvergara.tasky.presentation.task.state
 
-data class TaskModel(
+import com.onetree.andresvergara.tasky.domain.task.Task
+
+data class TaskUIState(
     override var id: Long = 0L,
-    override var title: String,
+    override var title: String = "",
     override var description: String? = null,
     override var completed: Boolean = false,
     override var latitude: Double? = null,
     override var longitude: Double? = null,
-    override var userId: Long = 0L
+    override var userId: Long = 0,
+    var isSelected: Boolean = false
 ) : Task {
 
     constructor(task: Task) : this(
@@ -17,10 +20,7 @@ data class TaskModel(
         completed = task.completed,
         latitude = task.latitude,
         longitude = task.longitude,
-        userId = task.userId
+        userId = task.userId,
+        isSelected = false
     )
-
-    override fun toString(): String {
-        return "Task(title='$title', description=$description, completed=$completed, latitude=$latitude, longitude=$longitude, userId=$userId)"
-    }
 }

@@ -1,71 +1,160 @@
 package com.onetree.andresvergara.tasky.presentation.task.ui
 
+
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarHost
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.touchlab.kermit.Logger
-import com.dokar.sheets.BottomSheetValue
-import com.dokar.sheets.m3.BottomSheet
-import com.dokar.sheets.rememberBottomSheetState
-import com.onetree.andresvergara.tasky.domain.task.Task
+import com.onetree.andresvergara.tasky.presentation.base.UiEvent
+import com.onetree.andresvergara.tasky.presentation.task.state.TaskListUIState
+import com.onetree.andresvergara.tasky.presentation.task.state.TaskUIState
 import com.onetree.andresvergara.tasky.presentation.task.viewmodel.TaskViewModel
+import com.onetree.andresvergara.tasky.presentation.ui.kit.ModalBottomSheet
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import tasky.composeapp.generated.resources.Res
+import tasky.composeapp.generated.resources.complete
+import tasky.composeapp.generated.resources.delete
 import tasky.composeapp.generated.resources.my_tasks
 import tasky.composeapp.generated.resources.new_task
 
 
 @Composable
 fun TaskHomeScreen(
-    viewModel: TaskViewModel = koinViewModel()
+    viewModel: TaskViewModel = koinViewModel(),
+    onTaskClick: (TaskUIState) -> Unit = {},
 ) {
     //To fetch the screen state
     viewModel.loadScreen.collectAsStateWithLifecycle()
 
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiListState.collectAsStateWithLifecycle()
+    val snackBarState by viewModel.uiSnackEvent.collectAsStateWithLifecycle(
+        initialValue = UiEvent.IDLE()
+    )
+
     TaskHomeView(
-        tasks = uiState.tasks
+        uiState = uiState,
+        snackBarState = snackBarState,
+        onTaskClick = { task ->
+            onTaskClick(task)
+        },
+        onToggleSelection = { task ->
+            viewModel.onToggleSelection(task)
+        },
+        onDeleteClick = {
+            viewModel.deleteSelected()
+        },
+        onMarkAsComplete = {
+            viewModel.markAsComplete()
+        }
+
     )
 }
 
 @Composable
 @Preview
 fun TaskHomeView(
-    tasks: List<Task>,
-    onTaskClick: (Task) -> Unit = {},
-    onAddTaskClick: () -> Unit = {},
-    onCompletedTaskClick: (Task) -> Unit = {},
-    onDeleteTaskClick: (Task) -> Unit = {}
+    uiState: TaskListUIState,
+    snackBarState: UiEvent,
+    onTaskClick: (TaskUIState) -> Unit = {},
+    onToggleSelection: (TaskUIState) -> Unit = {},
+    onDeleteClick: () -> Unit = {},
+    onMarkAsComplete: () -> Unit = {}
 ) {
-
+    val taskSelectedCount = uiState.tasks.count { it.isSelected }
+    val snackbarHostState = remember { SnackbarHostState() }
+    val genericSuccessMessage = stringResource(Res.string.my_tasks)
     val scope = rememberCoroutineScope()
-    val state = rememberBottomSheetState(
-        initialValue = BottomSheetValue.Collapsed,
+
+    val sheetState = rememberModalBottomSheetState(
+        initialValue = ModalBottomSheetValue.Hidden
     )
 
+    LaunchedEffect(Unit) {
+        if (snackBarState is UiEvent.ShowSnackbar) {
+            snackbarHostState.showSnackbar(
+                message = genericSuccessMessage
+            )
+        }
+    }
 
     Scaffold(
         topBar = {
             val topBarTitle = stringResource(Res.string.my_tasks)
-            TopAppBar(title = { Text(topBarTitle) })
+            TopAppBar(
+                windowInsets = WindowInsets.systemBars,
+                title = {
+                    Text(
+                        text = topBarTitle,
+                        style = MaterialTheme.typography.h6.copy(
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold
+                        )
+                    )
+                },
+
+                actions = {
+
+                    if (taskSelectedCount > 0) {
+
+                        IconButton(
+                            onClick = {
+                                onMarkAsComplete()
+                            }) {
+                            Icon(
+                                imageVector = Icons.Default.Check,
+                                contentDescription = stringResource(Res.string.complete),
+                                tint = Color.White
+                            )
+                        }
+                        IconButton(
+                            onClick = {
+                                onDeleteClick()
+                            }) {
+                            Icon(
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = stringResource(Res.string.delete),
+                                tint = Color.White
+                            )
+                        }
+                    }
+                }
+            )
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
         },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
                     Logger.i { "Floating Button Clicked" }
-                    scope.launch { state.expand() }
+                    scope.launch { sheetState.show() }
                 }) {
                 val newTask = stringResource(Res.string.new_task)
                 Icon(
@@ -76,15 +165,24 @@ fun TaskHomeView(
         }
     ) { paddingValues ->
         LazyColumn(contentPadding = paddingValues) {
-
+            itemsIndexed(
+                items = uiState.tasks,
+                key = { _, task -> task.id }) { _, task ->
+                TaskCard(
+                    task = task,
+                    toggleSelection = { task ->
+                        onToggleSelection(task)
+                    },
+                    onTaskClick = { task ->
+                        onTaskClick(task)
+                    }
+                )
+            }
         }
 
-        BottomSheet(
-            state = state,
-            showAboveKeyboard = true,
-            skipPeeked = true,
-        ) {
-            AddTaskView()
-        }
+        ModalBottomSheet(
+            showSheet = sheetState,
+            content = { AddTaskView() }
+        )
     }
 }

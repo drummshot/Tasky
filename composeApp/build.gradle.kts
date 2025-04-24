@@ -63,7 +63,6 @@ kotlin {
             implementation(libs.room.runtime)
             implementation(libs.sqlite.bundled)
             implementation(libs.navigation.compose)
-            implementation(libs.botomsheet.compose)
 
             //Log
             implementation(libs.kermit)

@@ -1,12 +1,12 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 1,
-    "identityHash": "be932268c695d56dd71b240f8cfa0632",
+    "version": 2,
+    "identityHash": "644c2d21df72af497696d6039f694471",
     "entities": [
       {
         "tableName": "TaskEntity",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `description` TEXT, `completed` INTEGER NOT NULL, `latitude` REAL, `longitude` REAL, `userId` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `description` TEXT, `completed` INTEGER NOT NULL, `latitude` REAL, `longitude` REAL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -40,12 +40,6 @@
             "fieldPath": "longitude",
             "columnName": "longitude",
             "affinity": "REAL"
-          },
-          {
-            "fieldPath": "userId",
-            "columnName": "userId",
-            "affinity": "INTEGER",
-            "notNull": true
           }
         ],
         "primaryKey": {
@@ -87,7 +81,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'be932268c695d56dd71b240f8cfa0632')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '644c2d21df72af497696d6039f694471')"
     ]
   }
 }

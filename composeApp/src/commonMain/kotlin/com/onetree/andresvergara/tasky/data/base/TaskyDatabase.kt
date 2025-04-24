@@ -9,18 +9,21 @@ import androidx.room.RoomDatabaseConstructor
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import com.onetree.andresvergara.tasky.data.task.TaskEntity
 import com.onetree.andresvergara.tasky.data.task.dao.TaskDao
+import com.onetree.andresvergara.tasky.data.user.UserEntity
+import com.onetree.andresvergara.tasky.data.user.dao.UserDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 
 const val DATABASE_NAME = "tasky.db"
 
 @Database(
-    entities = [TaskEntity::class],
+    entities = [TaskEntity::class, UserEntity::class],
     version = 1
 )
 @ConstructedBy(AppDatabaseConstructor::class)
 abstract class TaskyDatabase : RoomDatabase() {
     abstract fun taskDao(): TaskDao
+    abstract fun userDao(): UserDao
 }
 
 @Suppress("NO_ACTUAL_FOR_EXPECT")

@@ -1,0 +1,24 @@
+<resources>
+    <string name="my_tasks">My Tasks</string>
+    <string name="new_task">New Task</string>
+    <string name="back">Back</string>
+    <string name="completed">Completed</string>
+    <string name="pending">Pending</string>
+    <string name="delete">Delete</string>
+    <string name="complete">Complete</string>
+    <string name="create_task">Create Task</string>
+    <string name="task_title">Task Title *</string>
+    <string name="task_description">Task Description</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="task_detail">Tasks Detail</string>
+    <string name="task_deleted">Tasks Deleted</string>
+    <string name="task_created">Tasks Created</string>
+    <string name="task_completed">Tasks Completed</string>
+    <string name="required_title">Title is required</string>
+    <string name="task_location">Creation Coordinates</string>
+    <string name="task_latitude">Latitude:</string>
+    <string name="task_longitude">Longitude:</string>
+
+
+</resources>

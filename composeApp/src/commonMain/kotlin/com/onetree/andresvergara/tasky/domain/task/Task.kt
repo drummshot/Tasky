@@ -8,4 +8,5 @@ interface Task : DomainObject {
     var completed: Boolean
     var latitude: Double?
     var longitude: Double?
+    var userId: Long
 }
