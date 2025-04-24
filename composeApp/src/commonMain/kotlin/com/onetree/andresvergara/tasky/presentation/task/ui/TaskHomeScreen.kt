@@ -65,7 +65,7 @@ fun TaskHomeScreen(
             onTaskClick(task)
         },
         onToggleSelection = { task ->
-            viewModel.onToggleSelection(task)
+            viewModel.toggleSelection(task)
         },
         onDeleteClick = {
             viewModel.deleteSelected()

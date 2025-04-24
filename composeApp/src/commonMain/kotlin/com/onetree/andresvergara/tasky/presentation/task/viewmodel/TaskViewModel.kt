@@ -12,7 +12,6 @@ import com.onetree.andresvergara.tasky.domain.task.usecase.ListTasksUseCase
 import com.onetree.andresvergara.tasky.domain.task.usecase.MarkCompletedTasksUseCase
 import com.onetree.andresvergara.tasky.domain.task.usecase.TaskDetailUseCase
 import com.onetree.andresvergara.tasky.presentation.base.UiEvent
-import com.onetree.andresvergara.tasky.presentation.base.UiEvent.IDLE
 import com.onetree.andresvergara.tasky.presentation.task.state.TaskListUIState
 import com.onetree.andresvergara.tasky.presentation.task.state.TaskUIState
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -20,7 +19,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -134,7 +132,7 @@ class TaskViewModel(
         }
     }
 
-    fun onToggleSelection(state: TaskUIState) {
+    fun toggleSelection(state: TaskUIState) {
         _uiListState.update {
             it.copy(
                 tasks = it.tasks.map {
