@@ -137,7 +137,10 @@ fun TaskCard(
                         modifier = Modifier
                             .padding(end = 6.dp)
                             .background(
-                                color = Color(MaterialTheme.colors.error.value),
+                                color  = if (task.completed)
+                                    MaterialTheme.colors.primary
+                                else
+                                    MaterialTheme.colors.error,
                                 shape = RoundedCornerShape(8.dp)
                             )
                             .padding(horizontal = 8.dp, vertical = 4.dp)

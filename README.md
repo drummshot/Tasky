@@ -47,23 +47,25 @@ Tasky includes a custom `SessionManager` for handling user sessions and enforcin
 
 ## 🌍 Platform Support
 
-| Platform     | Status                       |
-|--------------|------------------------------|
-| Android      | ✅ Full Support               |
-| iOS          | 🔄 In Progress (Experimental)|
-|              |                              |
+| Platform     | Status           |
+|--------------|------------------|
+| Android      | ✅ Full Support   |
+| iOS          | 🔄 Beta Support  |
+|              |                  |
 
 ---
-## Screenshots
-<img src="https://github.com/user-attachments/assets/9489303a-921d-4a09-b022-4fab68236c25" alt="Alt Text" width="300" height="650">
+## 📸 Screenshots
 
+| Android                                                                                                               | iOS                                                                                                                   |
+|-----------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|
+| <img width="260" alt="Image" src="https://github.com/user-attachments/assets/572ed518-c9bb-4e90-8f0e-deb34a17112f" /> | <img width="260" alt="Image" src="https://github.com/user-attachments/assets/f05128c8-b6ff-44fc-8407-872a1181b724" /> |
 
 ---
 
 
-## 📦 Installation & Setup
+## 🚀 Installation & Setup
 
-📌 **Coming soon** – Instructions to build and run Tasky across platforms.
+📌 The app runs on both **iOS** and **Android**. Simply clone the project, import it into your IDE, and build it to get started.
 
 ---
 

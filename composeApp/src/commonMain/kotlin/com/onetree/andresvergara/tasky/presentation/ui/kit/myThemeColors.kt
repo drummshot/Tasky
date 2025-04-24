@@ -4,17 +4,17 @@ import androidx.compose.material.Colors
 import androidx.compose.ui.graphics.Color
 
 val PastelMintSkyColors = Colors(
-    primary = Color(0xFFA7E9AF),
+    primary = Color(0xFF81C784),
     onPrimary = Color(0xFF1B5E20),
-    primaryVariant = Color(0xFFB2F2BB),
-    secondary = Color(0xFFB2EBF2),
+    primaryVariant = Color(0xFF66BB6A),
+    secondary = Color(0xFF4DD0E1),
     onSecondary = Color(0xFF004D40),
-    secondaryVariant = Color(0xFF80DEEA),
-    background = Color(0xFFFFFFFF),
-    onBackground = Color(0xFF37474F),
+    secondaryVariant = Color(0xFF26C6DA),
+    background = Color(0xFFF5F5F5),
+    onBackground = Color(0xFF263238),
     surface = Color(0xFFFFFFFF),
-    onSurface = Color(0xFF263238),
-    error = Color(0xFFFFCDD2),
-    onError = Color(0xFFD32F2F),
+    onSurface = Color(0xFF212121),
+    error = Color(0xFFEF9A9A),
+    onError = Color(0xFFB71C1C),
     isLight = true
 )

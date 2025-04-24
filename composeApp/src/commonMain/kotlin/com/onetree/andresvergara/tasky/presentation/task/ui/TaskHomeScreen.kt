@@ -25,8 +25,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.touchlab.kermit.Logger
 import com.onetree.andresvergara.tasky.presentation.base.UiEvent
@@ -152,6 +154,7 @@ fun TaskHomeView(
         },
         floatingActionButton = {
             FloatingActionButton(
+                modifier = Modifier.zIndex(0F),
                 onClick = {
                     Logger.i { "Floating Button Clicked" }
                     scope.launch { sheetState.show() }
