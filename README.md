@@ -1,6 +1,6 @@
 # 📝 Tasky
 
-**Tasky** is a cross-platform task management app built with Kotlin Multiplatform, applying modern architectural patterns and clean code principles. The project follows a feature-driven approach and leverages the power of **Concentric Clean Architecture**.
+**Tasky** is a cross-platform task management app built with Kotlin Multiplatform, applying modern architectural patterns and clean code principles. The project follows a feature-driven approach and leverages the power of **Clean Architecture**.
 
 ---
 
